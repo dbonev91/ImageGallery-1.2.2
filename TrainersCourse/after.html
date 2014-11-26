@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Image Gallery</title>
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="js/jQuery/jQuery.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/loadImages.js"></script>
+    <script src="js/image.js"></script>
+    <script src="js/container.js"></script>
+    <script src="js/button.js"></script>
+    <script src="js/event.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body>
+<header>
+    <div class="wrapper header">
+        <img src="design/SoftUniLogo.png" class="logo" title="Software University" />
+    </div>
+</header>
+<main>
+    <div class="wrapper main">
+        <div class="imagesHolder">
+            <span class="smallImageContainer 0">
+                <img src="uploads/small/1.jpg" class="smallImage 0">
+            </span>
+            <span class="smallImageContainer 1">
+                <img src="uploads/small/10.JPG" class="smallImage 1">
+            </span>
+            <span class="smallImageContainer 2">
+                <img src="uploads/small/11.JPG" class="smallImage 2">
+            </span>
+            <span class="smallImageContainer 3">
+                <img src="uploads/small/12.JPG" class="smallImage 3">
+            </span>
+            <span class="smallImageContainer 4">
+                <img src="uploads/small/13.JPG" class="smallImage 4">
+            </span>
+            <span class="smallImageContainer 5">
+                <img src="uploads/small/14.JPG" class="smallImage 5">
+            </span>
+            <span class="smallImageContainer 6">
+                <img src="uploads/small/15.JPG" class="smallImage 6">
+            </span>
+            <span class="smallImageContainer 7">
+                <img src="uploads/small/16.JPG" class="smallImage 7">
+            </span>
+            <span class="smallImageContainer 8">
+                <img src="uploads/small/17.JPG" class="smallImage 8">
+            </span>
+            <span class="smallImageContainer 9">
+                <img src="uploads/small/18.JPG" class="smallImage 9">
+            </span>
+            <span class="smallImageContainer 10">
+                <img src="uploads/small/19.JPG" class="smallImage 10">
+            </span>
+            <span class="smallImageContainer 11">
+                <img src="uploads/small/2.jpg" class="smallImage 11">
+            </span>
+            <span class="smallImageContainer 12">
+                <img src="uploads/small/20.JPG" class="smallImage 12">
+            </span>
+            <span class="smallImageContainer 13">
+                <img src="uploads/small/21.JPG" class="smallImage 13">
+            </span>
+            <span class="smallImageContainer 14">
+                <img src="uploads/small/22.JPG" class="smallImage 14">
+            </span>
+            <span class="smallImageContainer 15">
+                <img src="uploads/small/23.JPG" class="smallImage 15">
+            </span>
+            <span class="smallImageContainer 16">
+                <img src="uploads/small/24.JPG" class="smallImage 16">
+            </span>
+            <span class="smallImageContainer 17">
+                <img src="uploads/small/25.JPG" class="smallImage 17">
+            </span>
+            <span class="smallImageContainer 18">
+                <img src="uploads/small/26.JPG" class="smallImage 18">
+            </span>
+            <span class="smallImageContainer 19">
+                <img src="uploads/small/27.JPG" class="smallImage 19">
+            </span>
+            <span class="smallImageContainer 20">
+                <img src="uploads/small/28.JPG" class="smallImage 20">
+            </span>
+            <span class="smallImageContainer 21">
+                <img src="uploads/small/29.JPG" class="smallImage 21">
+            </span>
+            <span class="smallImageContainer 22">
+                <img src="uploads/small/3.JPG" class="smallImage 22">
+            </span>
+            <span class="smallImageContainer 23">
+                <img src="uploads/small/30.JPG" class="smallImage 23">
+            </span>
+            <span class="smallImageContainer 24">
+                <img src="uploads/small/31.JPG" class="smallImage 24">
+            </span>
+            <span class="smallImageContainer 25">
+                <img src="uploads/small/32.png" class="smallImage 25">
+            </span>
+            <span class="smallImageContainer 26">
+                <img src="uploads/small/33.jpg" class="smallImage 26">
+            </span>
+            <span class="smallImageContainer 27">
+                <img src="uploads/small/34.jpg" class="smallImage 27">
+            </span>
+            <span class="smallImageContainer 28">
+                <img src="uploads/small/4.JPG" class="smallImage 28">
+            </span>
+            <span class="smallImageContainer 29">
+                <img src="uploads/small/5.JPG" class="smallImage 29">
+            </span>
+            <span class="smallImageContainer 30">
+                <img src="uploads/small/6.JPG" class="smallImage 30">
+            </span>
+            <span class="smallImageContainer 31">
+                <img src="uploads/small/7.JPG" class="smallImage 31">
+            </span>
+            <span class="smallImageContainer 32">
+                <img src="uploads/small/8.JPG" class="smallImage 32">
+            </span>
+            <span class="smallImageContainer 33">
+                <img src="uploads/small/9.JPG" class="smallImage 33">
+            </span>
+            <span class="smallImageContainer 34">
+                <img src="uploads/small/35.jpg" class="smallImage 34">
+            </span>
+            <span class="smallImageContainer 35">
+                <img src="uploads/small/36.jpg" class="smallImage 35">
+            </span>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="wrapper footer">
+
+    </div>
+</footer>
+<div style="display: none;" class="virtualBackground">
+    <div class="aboveTheBigImage">
+        <div class="bigImageLeftArrowHolder">
+            <span class="middleHelper"></span>
+            <img src="design/LeftArrow.png" title="leftArrow" class="leftArrow 0">
+        </div>
+        <div class="bigImageCenter">
+            <img src="uploads/big/1.jpg" class="bigImage 0" />
+        </div>
+        <div class="bigImageRightArrowHolder">
+            <div class="closeVirtualImage">
+                <img src="design/Cross.png" title="Close">
+            </div>
+            <span class="middleHelper"></span>
+            <img src="design/RightArrow.png" title="rightArrow" class="rightArrow 0">
+        </div>
+    </div>
+    <div class="virtualImageHolder 0">
+
+    </div>
+</div>
+</body>
+</html>
