@@ -1,14 +1,11 @@
 var Container = (function () {
-
-    var APPEND_TO_CLASS_NAME = 'imagesHolder',
-        SMALL_IMAGES_CONTAINER_CLASS_NAME = 'smallImageContainer';
+    var MEDIUM_IMAGES_CONTAINER_CLASS_NAME = 'mediumImageContainer';
 
     var Container = (function () {
         function Container (containerId) {
-            /*if (this.constructor === Image) {
-                throw new Error('Cannot instantiate abstract class Image.');
-            }*/
-
+            //if (this.constructor === Image) {
+            //    throw new Error('Cannot instantiate abstract class Image.');
+            //}
             this.setContainerId(containerId);
         }
 
@@ -21,27 +18,49 @@ var Container = (function () {
         }
 
         return Container;
-
     })();
 
+
     var SmallImageContainer = (function () {
-        function SmallImageContainer(containerId) {
+        function SmallImageContainer(containerId, appendTo) {
             Container.call(this, containerId);
 
-            this.appendContainer();
+            this.appendContainer(appendTo);
         }
 
         SmallImageContainer.prototype = new Container();
 
-        SmallImageContainer.prototype.appendContainer = function () {
-            $("." + APPEND_TO_CLASS_NAME)
-                .append('<span class="' + SMALL_IMAGES_CONTAINER_CLASS_NAME + ' ' + this.getContainerId() +
-                '"></span>');
+        var smallImageHolderClass = 'horizontalSliderSmallImageHolder';
+
+        SmallImageContainer.prototype.appendContainer = function (appendTo) {
+            $(appendTo)
+                .append($('<span class="' + smallImageHolderClass + ' ' + this.getContainerId() +
+                '"></span>')
+                    .css({width: '100px'}));
         }
 
         return SmallImageContainer;
-
     })();
+
+
+    var MediumImageContainer = (function () {
+        function MediumImageContainer(containerId, appendTo) {
+            Container.call(this, containerId);
+
+            this.appendContainer(appendTo);
+        }
+
+        MediumImageContainer.prototype = new Container();
+
+        MediumImageContainer.prototype.appendContainer = function (appendTo) {
+            $(appendTo)
+                .append('<span class="' + MEDIUM_IMAGES_CONTAINER_CLASS_NAME + ' ' +
+                this.getContainerId() + '"></span>');
+        }
+
+        return MediumImageContainer;
+    })();
+
 
     var BigImageContainer = (function () {
         function BigImageContainer(containerId) {
@@ -78,13 +97,94 @@ var Container = (function () {
         }
 
         return BigImageContainer;
-
     })();
+
+
+    var HorizontalSliderContainer = (function () {
+        function HorizontalSliderContainer (containerId, appendTo, JSONImages) {
+            Container.call(this, containerId);
+
+            HorizontalSliderVariables.JSONImages = JSONImages;
+            this.generateBody(appendTo);
+            this.arrowHolders();
+            this.imagesHolder();
+            this.remakeEndIndex();
+        }
+
+        HorizontalSliderContainer.prototype = new Container();
+
+        HorizontalSliderContainer.prototype.generateBody = function (appendTo) {
+            if (!$('.' + HorizontalSliderSelectors.SLIDER_BODY_CLASS).length) {
+                $(appendTo)
+                    .append($('<div class="' + HorizontalSliderSelectors.SLIDER_BODY_CLASS + '"></div>'));
+            }
+        }
+
+        HorizontalSliderContainer.prototype.arrowHolders = function () {
+            if (!$('.' + HorizontalSliderSelectors.LEFT_ARROW_CLASS).length) {
+                $('.' + HorizontalSliderSelectors.SLIDER_BODY_CLASS)
+                    .append('<span class="' + HorizontalSliderSelectors.LEFT_ARROW_CLASS + '">' +
+                    '<img class="' + HorizontalSliderSelectors.LEFT_ARROW_IMAGE_CLASS + '" src="' +
+                    GeneralVariables.DESIGN_DIRECTORY + 'LeftArrow.png" /></span>')
+                    .append('<span class="' + HorizontalSliderSelectors.RIGHT_ARROW_CLASS + '">' +
+                    '<img class="' + HorizontalSliderSelectors.RIGHT_ARROW_IMAGE_CLASS + '" src="' +
+                    GeneralVariables.DESIGN_DIRECTORY + 'RightArrow.png" /></span>');
+            }
+        }
+
+        HorizontalSliderContainer.prototype.imagesHolder = function () {
+            imagesHolderData();
+
+            if (!$('.' + HorizontalSliderSelectors.IMAGES_HOLDER_CLASS).length) {
+                $('.' + HorizontalSliderSelectors.LEFT_ARROW_CLASS)
+                    .after($('<div class="' + HorizontalSliderSelectors.IMAGES_HOLDER_CLASS + '"></div>')
+                        .css('width', HorizontalSliderVariables.smallImagesHolderWidth));
+            }
+
+            $(window).on('resize', function () {
+                imagesHolderData();
+
+                $('<div class="' + HorizontalSliderSelectors.IMAGES_HOLDER_CLASS + '"></div>')
+                        .css('width', HorizontalSliderVariables.smallImagesHolderWidth);
+            });
+        }
+
+        var imagesHolderData = function () {
+            HorizontalSliderVariables.bodyWidth =
+                $('.' + HorizontalSliderSelectors.SLIDER_BODY_CLASS).css('width');
+            HorizontalSliderVariables.arrowHolderWidth =
+                $('.' + HorizontalSliderSelectors.LEFT_ARROW_CLASS).css('width');
+            HorizontalSliderVariables.arrowHoldersWidth =
+                2 * parseInt(HorizontalSliderVariables.arrowHolderWidth);
+            HorizontalSliderVariables.smallImagesHolderWidth =
+                parseInt(HorizontalSliderVariables.bodyWidth) -
+                (HorizontalSliderVariables.arrowHoldersWidth) - 1;
+            HorizontalSliderVariables.smallImagesCount =
+                parseInt(HorizontalSliderVariables.smallImagesHolderWidth / 100);
+        }
+
+        HorizontalSliderContainer.prototype.remakeEndIndex = function () {
+            endIndexLogic();
+
+            $(window).on('resize', function () {
+                endIndexLogic();
+            });
+        }
+
+        var endIndexLogic = function () {
+            HorizontalSliderVariables.endIndex = HorizontalSliderVariables.startIndex || 0 +
+                HorizontalSliderVariables.smallImagesCount;
+        }
+
+        return HorizontalSliderContainer;
+    })();
+
 
     return {
         Container: Container,
         SmallImageContainer: SmallImageContainer,
-        BigImageContainer: BigImageContainer
+        MediumImageContainer: MediumImageContainer,
+        BigImageContainer: BigImageContainer,
+        HorizontalSliderContainer: HorizontalSliderContainer
     }
-
 })();
