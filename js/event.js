@@ -1,5 +1,4 @@
 var Event = (function () {
-
     var ShowHideVirtualBackground = (function () {
         function ShowHideVirtualBackground() {
             this.showVirtualBackground();
@@ -7,9 +6,8 @@ var Event = (function () {
         }
 
         ShowHideVirtualBackground.prototype.showVirtualBackground = function () {
-            $('.smallImage').on('click', function () {
+            $('.mediumImage').on('click', function () {
                 $('.virtualBackground').show();
-
                 new Event.SlideImage();
                 new Event.LoadVirtualImage($(this).attr('class').split(' ')[1]);
 
@@ -44,14 +42,13 @@ var Event = (function () {
         }
 
         return ShowHideVirtualBackground ;
-
     })();
+
 
     var LoadVirtualImage = (function () {
         function LoadVirtualImage(imageId) {
             this.setImageId(imageId);
             this.setImageName();
-
             this.appendImage();
         }
 
@@ -76,10 +73,11 @@ var Event = (function () {
         }
 
         return LoadVirtualImage;
-
     })();
 
     var SlideImage = (function () {
+        var targetClass;
+
         function SlideImage() {
             this.nextImage();
             this.prevImage();
@@ -88,13 +86,16 @@ var Event = (function () {
         }
 
         SlideImage.prototype.prevImage = function () {
-            $(".leftArrow, .bigImageLeftArrowHolder")
-                .on('click', function () {
+            $(document).on('click', function (event) {
+                targetClass = event.target.className.split(' ')[0];
+                if (targetClass == 'bigImageLeftArrowHolder' ||
+                    targetClass == 'leftArrow') {
                     prevImageLogic();
+                }
             });
 
-            $(document).on('keypress', function (event) {
-                if (event.keyCode == 37) {
+            $(document).on('keydown', function (event) {
+                if (event.which == 37) {
                     prevImageLogic();
                 }
             });
@@ -102,8 +103,8 @@ var Event = (function () {
 
         var prevImageLogic = function () {
             GeneralVariables.currentImage = isNaN(GeneralVariables.currentImage) ? '' :
-                GeneralVariables.currentImage ? --GeneralVariables.currentImage :
-                GeneralVariables.JSONImageData.length - 1;
+                (GeneralVariables.currentImage ? --GeneralVariables.currentImage :
+                GeneralVariables.JSONImageData.length - 1);
 
             new Image.BigImage(GeneralVariables.JSONImageData[GeneralVariables.currentImage].imagename, GeneralVariables.currentImage);
 
@@ -113,13 +114,17 @@ var Event = (function () {
         }
 
         SlideImage.prototype.nextImage = function () {
-            $(".rightArrow, .bigImageRightArrowHolder, .bigImageCenter")
-                .on('click', function () {
-                nextImageLogic();
+            $(document).on('click', function (event) {
+                targetClass = event.target.className.split(' ')[0];
+                if (targetClass == 'rightArrow' ||
+                    targetClass == 'bigImageCenter' ||
+                    targetClass == 'bigImageRightArrowHolder') {
+                    nextImageLogic();
+                }
             });
 
-            $(document).on('keypress', function (event) {
-                if (event.keyCode == 39) {
+            $(document).on('keydown', function (event) {
+                if (event.which == 39) {
                     nextImageLogic();
                 }
             });
@@ -158,8 +163,8 @@ var Event = (function () {
         }
 
         return SlideImage;
-
     })();
+
 
     var DisableScrollingPage = (function () {
         function DisableScrollingPage() {
@@ -179,7 +184,6 @@ var Event = (function () {
 
         DisableScrollingPage.prototype.disableScrolling = function () {
             var disabledKeyWhich = [32, 33, 34, 38, 40, 35];
-
             $(document).on("keydown", function (event) {
                 if (disabledKeyWhich.indexOf(event.which) !== -1) {
                     event.preventDefault();
@@ -188,8 +192,8 @@ var Event = (function () {
         }
 
         return DisableScrollingPage;
-
     })();
+
 
     var EnableScrollingPage = (function () {
         function EnableScrollingPage() {
@@ -210,15 +214,53 @@ var Event = (function () {
         }
 
         return EnableScrollingPage;
-
     })();
+
+
+    var HorizontalSliderSizes = (function () {
+        function HorizontalSliderSizes () {
+            this.resizeEvent();
+            this.moveRight();
+            this.moveLeft();
+        }
+
+        HorizontalSliderSizes.prototype.resizeEvent = function () {
+            $(window).on('resize', function () {
+                HorizontalSliderVariables.buildSmallImages();
+            });
+        }
+
+        HorizontalSliderSizes.prototype.moveRight = function () {
+            $(document).on('click', '.' + HorizontalSliderSelectors.RIGHT_ARROW_CLASS, function () {
+                HorizontalSliderVariables.startIndex >=
+                (HorizontalSliderVariables.JSONImages.length - HorizontalSliderVariables.smallImagesCount) ?
+                    HorizontalSliderVariables.startIndex = HorizontalSliderVariables.JSONImages.length -
+                    HorizontalSliderVariables.smallImagesCount :
+                    HorizontalSliderVariables.startIndex += 1;
+
+                HorizontalSliderVariables.buildSmallImages();
+            });
+        }
+
+        HorizontalSliderSizes.prototype.moveLeft = function () {
+            $(document).on('click', '.' + HorizontalSliderSelectors.LEFT_ARROW_CLASS, function () {
+                HorizontalSliderVariables.startIndex <= 0 ? HorizontalSliderVariables.startIndex = 0 :
+                    HorizontalSliderVariables.startIndex -= 1;
+
+                HorizontalSliderVariables.buildSmallImages();
+            });
+        }
+
+        return HorizontalSliderSizes;
+    })();
+
 
     return {
         ShowHideVirtualBackground : ShowHideVirtualBackground,
         LoadVirtualImage: LoadVirtualImage,
         SlideImage: SlideImage,
         DisableScrollingPage: DisableScrollingPage,
-        EnableScrollingPage: EnableScrollingPage
+        EnableScrollingPage: EnableScrollingPage,
+        HorizontalSliderSizes: HorizontalSliderSizes
     }
-
 })();
