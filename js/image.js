@@ -1,16 +1,17 @@
 var Image = (function () {
-    var mediumImageContainerClass = '.mediumImageContainer',
+
+    var smallImageContainerClass = '.smallImageContainer',
         bigImageContainerClass = '.virtualImageHolder',
         smallImageClass = 'smallImage',
-        mediumImageClass = 'mediumImage',
         bigImageClass = 'bigImage';
 
-
     var Image = (function () {
+
         function Image (name, id) {
             /*if (this.constructor === Image) {
-             throw new Error('Cannot instantiate abstract class Image.');
-             }*/
+                throw new Error('Cannot instantiate abstract class Image.');
+            }*/
+
             this.setImageName(name);
             this.setImageId(id);
         }
@@ -32,64 +33,42 @@ var Image = (function () {
         }
 
         return Image;
+
     })();
 
-
     var SmallImage = (function () {
-        function SmallImage(name, id, appendTo) {
+        function SmallImage(name, id) {
             Image.apply(this, [name, id]);
 
-            this.drawImage(appendTo);
+            this.drawImage();
         }
 
         SmallImage.prototype = new Image();
 
         SmallImage.prototype.imageType = 'small';
 
-        SmallImage.prototype.drawImage = function (appendTo) {
-            $(appendTo)
+        SmallImage.prototype.drawImage = function () {
+            $(smallImageContainerClass)
                 .filter("." + this.getImageId())
-                .html('<img class="' + smallImageClass + ' ' + this.getImageId() + '" />');
+                .html('<img class="' + smallImageClass  + ' ' + this.getImageId() + '" />');
 
             $('.' + smallImageClass)
                 .filter('.' + this.getImageId())
-                .attr('src', this.getImageName());
+                .attr('src', GeneralVariables.IMAGES_DIRECTORY + this.imageType + '/' + this.getImageName());
         }
 
         return SmallImage;
+
     })();
-
-
-    var MediumImage = (function () {
-        function MediumImage(name, id) {
-            Image.apply(this, [name, id]);
-            this.drawImage();
-        }
-
-        MediumImage.prototype = new Image();
-
-        MediumImage.prototype.imageType = 'mid';
-
-        MediumImage.prototype.drawImage = function () {
-            $(mediumImageContainerClass)
-                .filter("." + this.getImageId())
-                .html('<img class="' + mediumImageClass + ' ' + this.getImageId() + '" />');
-
-            $('.' + mediumImageClass)
-                .filter('.' + this.getImageId())
-                .attr('src', this.getImageName());
-        }
-
-        return MediumImage;
-    })();
-
 
     var BigImage = (function () {
+
         var bigImageWidth,
             bigImageHeight;
 
         function BigImage(name, id) {
             Image.apply(this, [name, id]);
+
             this.drawImage();
         }
 
@@ -119,22 +98,22 @@ var Image = (function () {
 
         BigImage.prototype.drawImage = function () {
             $(bigImageContainerClass)
-                .html('<span class="middleHelper"></span><img class="' + bigImageClass + ' ' +
-                this.getImageId() + '" />');
+                .html('<span class="middleHelper"></span><img class="' + bigImageClass + ' ' + this.getImageId() + '" />');
 
             $('.' + bigImageClass)
-                .attr('src', this.getImageName());
+                .attr('src', GeneralVariables.IMAGES_DIRECTORY + this.imageType + '/' + this.getImageName());
 
             this.drawArrowsContainer();
         }
 
         return BigImage;
+
     })();
 
     return {
         Image: Image,
         SmallImage: SmallImage,
-        BigImage: BigImage,
-        MediumImage: MediumImage
+        BigImage: BigImage
     }
+
 })();
