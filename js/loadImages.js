@@ -2,70 +2,49 @@ var ImageLoader = (function () {
 
     var ImageSelector = (function () {
         function ImageSelector() {
-            if (sessionStorage.getObj('JSONImageData')) {
-                GeneralVariables.JSONImageData = sessionStorage.getObj('JSONImageData');
+            this.getImagesFromDataBase();
 
-                new Event.HorizontalSliderSizes();
+            $(document).ajaxComplete(function () {
                 new ImageLoader.ImageMounter();
                 new Container.BigImageContainer(0);
                 new Event.ShowHideVirtualBackground();
-            }
-            else {
-                this.getImagesFromDataBase();
-
-                $(document).ajaxComplete(function () {
-                    new Event.HorizontalSliderSizes();
-                    new ImageLoader.ImageMounter();
-                    new Container.BigImageContainer(0);
-                    new Event.ShowHideVirtualBackground();
-                });
-            }
+                new Event.SlideImage();
+            });
         }
 
         ImageSelector.prototype.getImagesFromDataBase = function () {
             $.ajax({
-                method: "GET",
-                headers: GeneralVariables.headers,
-                url: GeneralVariables.url
-            }).success(function(data) {
-                GeneralVariables.JSONImageData = data.results;
-
-                sessionStorage.setObj('JSONImageData', GeneralVariables.JSONImageData);
-            }).error(function() {
-                alert('Cannot load images.');
+                url: 'selectAllImages.php',
+                success: function (result) {
+                    GeneralVariables.JSONImageData = JSON.parse(result);
+                }
             });
-        };
+        }
 
         return ImageSelector;
+
     })();
 
-
     var ImageMounter = (function () {
-        var i,
-            url;
-
         function ImageMounter() {
             this.mountImage();
-            HorizontalSliderVariables.buildSmallImages();
         }
 
         ImageMounter.prototype.mountImage = function () {
-            for (i = 0; i < GeneralVariables.JSONImageData.length; i++) {
-                url = GeneralVariables.JSONImageData[i].imagename;
+            for (var i = 0; i <  GeneralVariables.JSONImageData.length; i++) {
+                new Container.SmallImageContainer(i);
 
-                if(url) {
-                    new Container.MediumImageContainer(i, '.imagesHolder');
-                    new Image.MediumImage(url, i);
-                }
+                new Image.SmallImage(GeneralVariables.JSONImageData[i].imagename, i);
             }
-        };
+        }
 
         return ImageMounter;
-    })();
 
+    })();
 
     return {
         ImageSelector: ImageSelector,
         ImageMounter: ImageMounter
     }
+
 })();
